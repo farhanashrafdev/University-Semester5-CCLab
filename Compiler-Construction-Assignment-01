@@ -1,0 +1,272 @@
+/*
+QUESTION STATMENT :
+Q2. Write a program in C++ or Java that reads a source file and performs the followings operations:
+1.	Removal of white space
+2.	Removal of comments
+3.	Recognizes constants
+4.	Recognizes Keywords
+5.	Recognizes identifiers
+6.	Recognize operators
+-------------------------------------------------
+Sample data is File.txt
+1.	For ( int x= 0; x<=5; x++)
+2.	B= (( c + a) * d ) / f
+3.	While ( a < 5 )  
+			a= a+1
+4.	Char MyCourse[5];
+5.	 if ( a< b) 
+		a=a*a;
+else
+		b=b*b;
+ -------------------------------------------------SOLUTION STARTS HERE---------------------
+ */
+ #include<iostream>
+#include<fstream>
+#include<string>
+using namespace std;
+
+
+//GLOBAL VARIABLES:
+string listkeywords[32] = { "auto", "break", "case", "char", "const", "continue",
+"default","do", "double", "else", "enum", "extern", "float", "for", "goto",
+"if", "int", "long", "register", "return", "short", "signed","sizeof", "static",
+"struct", "switch", "typedef", "union","unsigned", "void", "volatile", "while" };
+
+//Functions Prototypes:
+void removeWhite(string s1);  
+void removeComments(string s1);
+void recognizesConst(string s1);
+void recognizesKey(string s1);
+void recognizesId(string s1);
+void recognizeOp(string s1);
+string init(){
+	string s1 = "/0";
+	fstream file; string s;
+	file.open("file.txt");
+while (getline(file, s))
+{
+	if (s1 == "/0")
+		s1 = s + '\n';
+	else
+		s1 += s + '\n';
+}
+return s1;
+}
+int main() {
+	int choice;
+	string s1;
+	s1 = init();
+	do {
+		system("cls");
+		cout << "Welcome to Farhan's Compiler: " << endl;
+		cout << "1- Removal of white space:" << endl;
+		cout << "2- Removal of comments:" << endl;
+		cout << "3- Recognizes constants:" << endl;
+		cout << "4- Recognizes Keywords:" << endl;
+		cout << "5- Recognizes identifiers:" << endl;
+		cout << "6- Recognize operators:" << endl;
+		cout << "Enter your Desired Extension: "; cin >> choice;
+		switch (choice) {
+		case 1: { removeWhite(s1);  }; break;
+		case 2: { removeComments(s1); }; break;
+		case 3: { recognizesConst(s1); }; break;
+		case 4: {recognizesKey(s1); }; break;
+		case 5: {recognizesId(s1); }; break;
+		case 6: {recognizeOp(s1); }; break;
+		}
+		cout << "Press 1 to perform another task or 0 to exit: "; cin >> choice;
+
+	} while (choice);
+	return 0;
+	}
+
+
+void removeWhite(string s1) {
+		string wwhitespaces="";
+	for (int i = 0; i < s1.length() - 1; i++)
+	{
+		if(s1[i]!=32)
+		{
+			wwhitespaces += s1[i];
+		}
+	}
+	cout << "String after removal of White spaces: " << wwhitespaces;
+}
+
+void removeComments(string s2) {
+	string wcomments;
+	for (int i = 0; i < s2.length() - 1; i++)
+	{
+		if (s2[i] == 47 && (s2[i + 1] == 47 || s2[i + 1] == '*'))
+		{
+			if (s2[i + 1] == 47) break;
+			
+		}
+		else if (s2[i + 1] == '*') {
+			while (s2[i] != '*' && s2[i + 1] != 92   )
+			{
+				i++;
+			}
+		}
+		else wcomments += s2[i];
+	}
+	cout << "String after removal of Comments: "; cout << wcomments;
+
+}
+
+void recognizesConst(string s1) 
+{
+	int j = s1.length();
+	int i = 0;
+	string constants="\0";
+
+	while (i < j)
+	{
+		int k = i;
+		string s = "\0";
+		while (s1[k] >= 48 && s1[k] <= 57)//will check if they are digits
+		{
+			if (s == "\0")
+				s = s1[k];
+			else
+				s += s1[k];
+			k++;
+		}
+		if (s != "\0")
+		{
+			if (constants == "\0") 
+				constants = s + '\n';
+			else
+			constants += s + '\n';
+			i = i + s.length();
+		}
+		else i++;
+	}
+	cout << " Constants are followings: " << endl << constants;
+
+}
+
+void recognizesKey(string s1)
+{
+	string keywords;
+	int i = s1.length();
+	int j = 0;
+	while (j < i)
+	{
+		int k = j;
+		int l = j;
+		string s = "\0";
+		string s2 = "\0";
+		while ((s1[k]>=65 && s1[k]<=90) || s1[k] != '_' &&  (s1[k]>=97 && s1[k]<=122) || (s1[k]>=48&&s1[k]<=57))
+		{
+			if (s == "\0")
+			{
+				s = s1[k];
+			}
+			else
+				s += s1[k];
+			k++;
+		}
+		if (s != "\0")
+		{
+			
+			
+			for (int i = 0; i < 32; i++)
+			{
+				if (s == listkeywords[i])
+				{
+					keywords += s + '\n';
+					
+				}
+			}
+			
+			j += s.length();
+		}
+		else
+			j++;
+		
+	}
+	cout << keywords;
+}
+void recognizesId(string s1) {
+	int i = s1.length();
+	int j = 0;
+	string identifier = "/0";
+	while (j < i)
+	{
+		int k = j;
+		int l = j;
+		string s = "\0", s2 = "\0";
+		
+		while ((s1[k] >= 65 && s1[k] <= 90) || s1[k] == '_' || (s1[k] >= 97 && s1[k] <= 122) || s1[k] >= 48 && s1[k] <= 57)
+		{
+			if (s == "\0")
+			{
+				if (!(s1[k] >= 48 && s1[k] <= 57))
+					s = s1[k];
+			}
+			else
+				s += s1[k];
+			k++;
+		}
+		if (s != "\0")
+		{
+			int check = 0;
+			for (int i = 0; i < 32; i++)
+			{
+				if (s == listkeywords[i]) check = 1;
+			}
+			if (!check)
+			{
+				if (identifier == "/0") identifier = s + '\n';
+				else
+				identifier += s + '\n';
+			}
+			j += s.length();
+		}
+		else
+			j++;
+	}
+	cout << "The Identifiers are Following: " << identifier;
+}
+
+void recognizeOp(string s1) {
+	string operators = "";
+	int i = 0;
+	int j = s1.length();
+while(i<j){
+	if (s1[i] == '+') {
+		if (s1[i + 1] == '+')
+		{
+			operators += "++,"; i += 2;
+		}
+		else {
+			operators += "+,"; i++;
+		}//plus
+	}//check if + or ++ exists;
+	else if (s1[i] == '-') {
+		if (s1[i + 1] == '-')
+		{
+			operators += "--,"; i += 2;
+		}
+		else {
+			operators += "-,"; i++;
+		}//minus
+	}//check if - or -- exists;
+	else if (s1[i] == '%' || s1[i] == '%')
+	{
+		operators += s1[i] + ","; i++;
+	}
+	else if (s1[i] == '/' && s1[i + 1] != '/' && s1[i - 1] != '/')
+	{
+		operators += "/,"; i++;
+	}
+	else if (s1[i] == '*' && s1[i + 1] != '*' && s1[i - 1] != '*') {
+		operators += "*," ; i++;
+	}
+	else i++;
+	
+}//while
+
+cout << "Operators are followings: " << operators << endl;
+}
