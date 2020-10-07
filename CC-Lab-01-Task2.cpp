@@ -2,41 +2,34 @@
 #include<string>
 #include<fstream>
 using namespace std;
-int main() {
-	string s, s2, cs, cs2; char c;
-	cout << "Enter the first string: "; cin >> s;
-	cout << "Enter the second String: "; cin >> s2;
-	fstream obj, obj2;
-	obj.open("file.txt", fstream::out);
-	obj << s;
-	obj.close();
-	obj2.open("file2.txt", fstream::out);
-	obj2 << s2;
-	obj2.close();
-	obj.open("file.txt");
-	if (obj.is_open())
-	{
-		int i = 0;
-		while (!obj.eof())
-		{
-			obj.get(c);
-			cs = cs + c;
-		}
-	}
-	obj.close();
+int main()
+{
+	
+	string palindrome,s; char c;
+	cout << "Enter the String: "; cin >> palindrome;
+	fstream file;
+	file.open("File.txt", fstream::out);
+	file << palindrome;
+	file.close();
 
-	obj2.open("file2.txt");
-	c = '\0';
-	if (obj2.is_open())
+	file.open("file.txt",fstream::in);
+	if (file.is_open())
 	{
-		int i = 0;
-		while (!obj2.eof())
+		while (!file.eof())
 		{
-			obj2.get(c);
-			cs2 = cs2 + c;
+			file.get(c);
+			if (!file.fail())
+			s += c;
 		}
 	}
-	if (cs == cs2) {
-		cout << "Both strings are same" << endl;
+	for (int i = 0,j = (s.length() - 1); i!=j && j>0; i++, j--)
+	{
+		if(s[i]!=s[j])
+		{
+			cout << "The string is not Palindrome " << endl;
+			exit(1);
+		}
 	}
-	else cout << "Both are not" << endl;
+	cout << "The string is Palindrome.";
+	return 0;
+}
