@@ -1,42 +1,47 @@
+/*Task 3: Write a program to convert a string from file to uppercase and store it in file.*/
+
 #include<iostream>
 #include<string>
 #include<fstream>
 using namespace std;
-int main() {
-	string s, s2, cs, cs2; char c;
-	cout << "Enter the first string: "; cin >> s;
-	cout << "Enter the second String: "; cin >> s2;
-	fstream obj, obj2;
-	obj.open("file.txt", fstream::out);
-	obj << s;
-	obj.close();
-	obj2.open("file2.txt", fstream::out);
-	obj2 << s2;
-	obj2.close();
-	obj.open("file.txt");
-	if (obj.is_open())
-	{
-		int i = 0;
-		while (!obj.eof())
-		{
-			obj.get(c);
-			cs = cs + c;
-		}
-	}
-	obj.close();
+int main()
+{
 
-	obj2.open("file2.txt");
-	c = '\0';
-	if (obj2.is_open())
+	string string, s, sup; char c;
+	cout << "Enter the String: "; cin >> string;
+	fstream file;
+	file.open("File.txt", fstream::out);
+	file << string;
+	file.close();
+	file.open("file.txt", fstream::in);
+	if (file.is_open())
 	{
-		int i = 0;
-		while (!obj2.eof())
+		while (!file.eof())
 		{
-			obj2.get(c);
-			cs2 = cs2 + c;
+			file.get(c);
+			if (!file.fail())
+				s += c;
 		}
 	}
-	if (cs == cs2) {
-		cout << "Both strings are same" << endl;
+	file.close();
+
+	file.open("file.txt", fstream::out);
+	for (int i = 0; i < s.length(); i++)
+		sup += toupper(s[i]);
+	cout << "The string Written is: " << sup << endl;
+	file << sup;
+	file.close();
+	file.open("file.txt", fstream::in);
+	if (file.is_open())
+	{
+		while (!file.eof())
+		{
+			file.get(c);
+			if (!file.fail())
+				s += c;
+			cout << c;
+		}
 	}
-	else cout << "Both are not" << endl;
+	file.close();
+	return 0;
+}
