@@ -1,0 +1,5 @@
+Lab Tasks:
+Task 1: Detect the space, tab, newline and return corresponding Tokens.
+Task 2: Detect comma, semicolon, parenthesis, brackets return corresponding Tokens
+Task 3: Detect Operators return corresponding Tokens.
+Task 4: Detect Digits return corresponding Tokens
